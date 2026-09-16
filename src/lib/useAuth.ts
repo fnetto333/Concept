@@ -61,7 +61,8 @@ export function useAuth(): AuthState {
   }, [fetchColaborador]);
 
   const signIn = useCallback(async (username: string, password: string) => {
-    const email = `${username.trim()}@concept.com.br`;
+    const normalizedUsername = username.trim().toLowerCase();
+    const email = `${normalizedUsername}@concept.com.br`;
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { error: error.message };
     return { error: null };
