@@ -19,7 +19,7 @@ export function UserManagement({ auth, onRefresh }: { auth: AuthState; onRefresh
 
   useEffect(() => { fetchColabs(); }, [fetchColabs]);
 
-  const handleCreate = async (formData: { email: string; password: string; nome: string; cargo: string; is_admin: boolean; confirmPassword: string }) => {
+  const handleCreate = async (formData: { email: string; password: string; nome: string; cargo: string; username: string; is_admin: boolean; confirmPassword: string }) => {
     setError(null);
     if (formData.password !== formData.confirmPassword) {
       setError('As senhas não conferem');
@@ -46,6 +46,7 @@ export function UserManagement({ auth, onRefresh }: { auth: AuthState; onRefresh
         nome: formData.nome,
         cargo: formData.cargo,
         is_admin: formData.is_admin,
+        username: formData.username,
       }),
     });
     const result = await res.json();
@@ -76,7 +77,8 @@ export function UserManagement({ auth, onRefresh }: { auth: AuthState; onRefresh
               <div className="user-avatar">{c.nome.split(' ').map(w => w[0]).slice(0, 2).join('')}</div>
               <div className="user-info"><strong>{c.nome}</strong><span>{c.cargo}</span></div>
               {c.is_admin && <span className="admin-badge"><ShieldCheck size={13} /> Admin</span>}
-              <small>{c.id === auth.user?.id ? 'Você' : ''}</small>
+              {c.username && <small>@{c.username}</small>}
+              <small>{c.id === auth.user?.id ? ' · Você' : ''}</small>
             </div>
           ))}
         </div>
@@ -87,7 +89,7 @@ export function UserManagement({ auth, onRefresh }: { auth: AuthState; onRefresh
 }
 
 function UserForm({ onCreate, onCancel, error }: {
-  onCreate: (d: { email: string; password: string; nome: string; cargo: string; is_admin: boolean; confirmPassword: string }) => void;
+  onCreate: (d: { email: string; password: string; nome: string; cargo: string; username: string; is_admin: boolean; confirmPassword: string }) => void;
   onCancel: () => void;
   error: string | null;
 }) {
@@ -106,7 +108,7 @@ function UserForm({ onCreate, onCancel, error }: {
       return;
     }
     const email = `${username.trim()}@concept.com.br`;
-    onCreate({ email, password, nome, cargo, is_admin, confirmPassword });
+    onCreate({ email, password, nome, cargo, username: username.trim(), is_admin, confirmPassword });
   };
 
   return (
@@ -115,9 +117,9 @@ function UserForm({ onCreate, onCancel, error }: {
         <div className="insumo-modal-head"><h2>Novo colaborador</h2><button className="modal-close" onClick={onCancel}>×</button></div>
         <form onSubmit={handleSubmit}>
           {error && <div className="form-error">{error}</div>}
-          <label>Nome completo<input value={nome} onChange={(e) => setNome(e.target.value)} required /></label>
-          <label>Cargo<input value={cargo} onChange={(e) => setCargo(e.target.value)} placeholder="Ex.: Arquiteta" required /></label>
-          <label>Usuário<input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="ex: marina.costa" required /></label>
+          <label>Nome completo<input value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Ex.: Francisco Neto" required /></label>
+          <label>Cargo/Função<input value={cargo} onChange={(e) => setCargo(e.target.value)} placeholder="Ex.: Eng. Civil" required /></label>
+          <label>Usuário<input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="ex: francisco.neto" required /></label>
           <div className="insumo-form-row">
             <label>Senha<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></label>
             <label>Confirmar senha<input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required /></label>

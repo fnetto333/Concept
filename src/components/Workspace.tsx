@@ -67,7 +67,7 @@ export function Workspace({
   return (
     <div className="workspace">
       <aside className="workspace-sidebar">
-        <button className="workspace-logo" onClick={onNavigateHome}><img src="/images/WhatsApp_Image_2026-09-14_at_15.13.25.jpeg" alt="Concept" /></button>
+        <button className="workspace-logo" onClick={onNavigateHome}><img src="/CONCEPT2.png" alt="Concept" /></button>
         <div className="workspace-user">
           <div className="avatar">{initials}</div>
           <div>
@@ -120,12 +120,21 @@ function Dashboard({ auth, budgets, onNavigate, onOpenBudget, onNewBudget }: {
     return 'Boa noite';
   })();
 
+  const initials = auth.colaborador?.nome?.split(' ').map((w: string) => w[0]).slice(0, 2).join('') ?? '??';
+
   return (
     <>
       <div className="workspace-top">
         <div>
           <span className="eyebrow">{new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
           <h1>{greeting}, {auth.colaborador?.nome?.split(' ')[0]}.</h1>
+        </div>
+        <div className="workspace-profile">
+          <div className="avatar small">{initials}</div>
+          <div className="profile-info">
+            <strong>{auth.colaborador?.nome ?? 'Usuário'}</strong>
+            <span>{auth.colaborador?.cargo ?? ''}</span>
+          </div>
         </div>
       </div>
       <div className="workspace-stats">

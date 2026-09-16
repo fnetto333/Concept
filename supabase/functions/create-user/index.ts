@@ -49,9 +49,9 @@ Deno.serve(async (req: Request) => {
     }
 
     const body = await req.json();
-    const { email, password, nome, cargo, is_admin } = body;
+    const { email, password, nome, cargo, is_admin, username } = body;
 
-    if (!email || !password || !nome || !cargo) {
+    if (!email || !password || !nome || !cargo || !username) {
       return new Response(JSON.stringify({ error: 'Dados incompletos' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -64,7 +64,7 @@ Deno.serve(async (req: Request) => {
       email,
       password,
       email_confirm: true,
-      user_metadata: { nome, cargo },
+      user_metadata: { nome, cargo, username },
     });
 
     if (createErr) {
@@ -76,7 +76,7 @@ Deno.serve(async (req: Request) => {
 
     const { error: colabErr } = await adminClient
       .from('colaboradores')
-      .insert({ id: newUser.user.id, nome, cargo, is_admin: !!is_admin });
+      .insert({ id: newUser.user.id, nome, cargo, is_admin: !!is_admin, username });
 
     if (colabErr) {
       return new Response(JSON.stringify({ error: colabErr.message }), {

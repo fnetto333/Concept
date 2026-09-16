@@ -65,7 +65,7 @@ export function LoginPage({ onEnter }: { onEnter: (username: string, password: s
   return (
     <section className="login-page">
       <div className="login-brand">
-        <img src="/images/WhatsApp_Image_2026-09-14_at_15.13.25.jpeg" alt="Concept Empreendimentos" />
+        <img src="/image.png" alt="Concept Empreendimentos" />
         <span>Ambiente exclusivo para colaboradores</span>
       </div>
       <div className="login-card">

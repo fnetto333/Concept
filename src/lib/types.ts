@@ -2,6 +2,7 @@ export type Colaborador = {
   id: string;
   nome: string;
   cargo: string;
+  username: string | null;
   is_admin: boolean;
   created_at: string;
 };
